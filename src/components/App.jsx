@@ -10,7 +10,7 @@ export const App = () => {
         color: '#010101'
       }}
     >
-      React homework template
+      Module 3. 2-Image-finder
     </div>
   );
 };
