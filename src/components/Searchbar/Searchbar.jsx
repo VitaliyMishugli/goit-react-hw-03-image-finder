@@ -31,6 +31,7 @@ export default class Searchbar extends Component{
           </button>
 
           <input
+            value={this.state.searchName}
             onChange={this.handleSearchName}
             className={css.SearchForm_input}
             type="text"
