@@ -1,6 +1,7 @@
 import { Component } from "react";
 import css from './Searchbar.module.css';
-// import { toast } from 'react-toastify';
+import { ImSearch } from "react-icons/im";
+import PropTypes from 'prop-types';
 
 export default class Searchbar extends Component{
   state = {
@@ -24,9 +25,10 @@ export default class Searchbar extends Component{
 
   render() {
     return (
-      <header className="searchbar">
+      <header className={css.searchbar}>
         <form className={css.SearchForm} onSubmit={this.handleSubmit}>
           <button type="submit" className={css.SearchForm_button}>
+            <ImSearch />
             <span className={css.SearchForm_button__label}>Search</span>
           </button>
 
@@ -43,4 +45,9 @@ export default class Searchbar extends Component{
       </header>
     )
   }
+}
+
+
+Searchbar.propTypes = {
+  submit: PropTypes.func.isRequired
 }

@@ -1,14 +1,26 @@
 /*
  * Стили компонента SearchForm
  */
+.searchbar{
+  display: flex;
+  justify-content: center;
+  background-color: rgba(10, 7, 163, 0.781);
+}
+
 .SearchForm {
   display: flex;
+  justify-content: center;
+   font: inherit;
+  padding: 8px;
+  max-width: 320px;  
+
+  /* display: flex;
   align-items: center;
   width: 100%;
   max-width: 600px;
   background-color: #fff;
   border-radius: 3px;
-  overflow: hidden;
+  overflow: hidden; */
 }
 
 .SearchForm_button {
