@@ -20,24 +20,21 @@ export default class App extends Component {
     })
   }
 
-  async componentDidUpdate(prevProps, prevState) {
-    if (prevState.searchName !== this.state.searchName) {
-      console.log(this.state.result);
-      // this.setState({ loading: true });
-      await API.apiRequest(this.state.searchName)
-        .then(res => res.json())
-        .then(response => this.setState({ result: response }))
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.searchName !== this.state.searchName) { 
+      API.apiRequest(this.state.searchName)
+        .then(({ hits }) => this.setState({ result: hits }))
         .catch(error => this.setState({ error }))
         // .finally(() => this.setState({ loading: false }));
     }
-    console.log(this.state.result);
   }
 
   render() {
+    const { result } = this.state;
     return (
       <>
         <Searchbar submit={this.handleSubmitForm} />
-        <ImageGallery queryResult={ this.state.result} />
+        <ImageGallery queryResult={result} />
       </>
     );
   }

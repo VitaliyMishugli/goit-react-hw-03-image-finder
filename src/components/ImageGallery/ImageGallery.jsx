@@ -1,39 +1,30 @@
 import { Component } from "react";
 import css from './ImageGallery.module.css';
-import { Circles } from 'react-loader-spinner'
+// import { Circles } from 'react-loader-spinner';
+import  {ImageGalleryItem}  from '../ImageGalleryItem/ImageGalleryItem';
 
-export default class ImageGalleryItem extends Component {
+export default class ImageGallery extends Component {
 
   state = {
-    result: null,
-    error: null,
-    loading: false
+    images: null,
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-
-  //   if (prevProps.searchQuery !== this.props.searchQuery) {
-  //     this.setState({ loading: true });
-  //     fetch(`https://pixabay.com/api/?q=${this.props.searchQuery}&page=1&key=29908422-6515e5e6655e3a8d0d58918bc&image_type=photo&orientation=horizontal&per_page=12`)
-  //       .then(res => res.json())
-  //       .then(res => this.setState({ result: res.hits[0] }))
-  //       .catch(error => this.setState({ error }))
-  //       .finally(() => this.setState({ loading: false }));
-  //   }
-  // }
+  componentDidUpdate(prevProps, prevState) {
+    console.log(prevProps.queryResult, this.props.queryResult);
+    if (prevProps.queryResult !== this.props.queryResult) {
+      this.setState({ images: this.props.queryResult })
+    }
+  }
 
   render() {
-    const { loading, result, error } = this.state;
+    const {images } = this.state;
     const { searchQuery } = this.props;
 
     return (
       <>
-        {error && <h2>Enter correct search request!</h2>}
-        {/* <div className={css.ImageGalleryItem}> */}
-
-          {/* <img src="" alt="" className={css.ImageGalleryItem_image} /> */}
+        {/* {error && <h2>Enter correct search request!</h2>} */}
           <p>{searchQuery}</p>
-        {loading &&
+        {/* {loading &&
           <div className={css.loading_wraper}>
             <Circles
               height="80"
@@ -44,13 +35,13 @@ export default class ImageGalleryItem extends Component {
               wrapperClass=""
               visible={true}
             />
-          </div>}
-          {result && (
-            <div>
-              <p>{result.user}</p>
-              < img src={result.previewURL} />
-            </div>
+          </div>} */}
+        
+
+        {images && <ul className={css.ImageGallery}>
+          {images.map(({ id, webformatURL }) => <ImageGalleryItem key={id} image={webformatURL} />
           )}
+        </ul>}          
       </>
 
     )
