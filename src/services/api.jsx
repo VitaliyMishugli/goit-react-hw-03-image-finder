@@ -3,9 +3,6 @@ function apiRequest (searchQuery){
     .then(res => res.json());    
 }
 
-
-
-
 const api = {
   apiRequest
 }

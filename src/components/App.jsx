@@ -1,13 +1,16 @@
 import { Component } from "react";
 import Searchbar from "./Searchbar/Searchbar";
 import ImageGallery from './ImageGallery/ImageGallery';
+import { Loader } from "./Loader/Loader";
 import API from '../services/api';
 
 export default class App extends Component {
   state = {
     result: null,
+    error: null,
     searchName: '',
-    status:'idle'
+    status: 'idle',
+
   }
   // 'idle'
   // 'pending'
@@ -21,22 +24,52 @@ export default class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.searchName !== this.state.searchName) { 
+    if (prevState.searchName !== this.state.searchName) {
+      this.setState({ status: 'pending' });
       API.apiRequest(this.state.searchName)
-        .then(({ hits }) => this.setState({ result: hits }))
-        .catch(error => this.setState({ error }))
-        // .finally(() => this.setState({ loading: false }));
+        .then(({ hits }) => this.setState({ result: hits, status: 'resolved'}))
+        .catch(error => this.setState({ error , status: 'rejected'}))
     }
   }
 
   render() {
-    const { result } = this.state;
-    return (
-      <>
-        <Searchbar submit={this.handleSubmitForm} />
-        <ImageGallery queryResult={result} />
-      </>
-    );
+    const { result, status } = this.state;
+    if (status === 'idle') {
+      return (
+        <>
+          <Searchbar submit={this.handleSubmitForm} />
+          {/* <h2>Enter search request.</h2> */}
+        </>
+      )
+    }
+
+    if (status === 'pending') {
+      return (
+        <>
+          <Searchbar submit={this.handleSubmitForm} />
+          <Loader />
+        </>)
+    }
+
+    if (status === 'rejected') {
+      return <h2>Enter correct search request!</h2>
+    }
+
+    if (status === 'resolved') {
+      return (
+        <>
+          <Searchbar submit={this.handleSubmitForm} />
+          <ImageGallery queryResult={result} />
+        </>
+      )
+    }
+
+    {/* // return (
+    //   <>
+    //     <Searchbar submit={this.handleSubmitForm} />
+    //     <ImageGallery queryResult={result} />
+    //   </>
+    // ); */}
   }
 
 };
