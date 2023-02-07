@@ -1,5 +1,5 @@
-function apiRequest (searchQuery){
-  return fetch(`https://pixabay.com/api/?q=${searchQuery}&page=1&key=29908422-6515e5e6655e3a8d0d58918bc&image_type=photo&orientation=horizontal&per_page=12`)
+function apiRequest (searchQuery, page){
+  return fetch(`https://pixabay.com/api/?q=${searchQuery}&page=${page}&key=29908422-6515e5e6655e3a8d0d58918bc&image_type=photo&orientation=horizontal&per_page=12`)
     .then(res => res.json());    
 }
 

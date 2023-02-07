@@ -5,24 +5,22 @@ import  {ImageGalleryItem}  from '../ImageGalleryItem/ImageGalleryItem';
 export default class ImageGallery extends Component {
 
   state = {
-    images: null,
+    error: '',
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    console.log(prevProps.queryResult, this.props.queryResult);
-    if (prevProps.queryResult !== this.props.queryResult) {
-      this.setState({ images: this.props.queryResult })
-    }
-  }
+  // componentDidUpdate(prevProps, prevState) {
+  //   // console.log(prevProps.queryResult, this.props.queryResult);
+  //   if (this.props.queryResult === []) {
+  //     this.setState({ error: 'Enter correct search request!' })
+  //   }
+  // }
 
   render() {
-    const {images } = this.state;
-    // const { searchQuery } = this.props;
-
+    const { queryResult } = this.props;
     return (
       <>
-        {images && <ul className={css.ImageGallery}>
-          {images.map(({ id, webformatURL }) => <ImageGalleryItem key={id} image={webformatURL} />
+        {queryResult && <ul className={css.ImageGallery}>
+          {queryResult.map(({ id, webformatURL }) => <ImageGalleryItem key={id} image={webformatURL} />
           )}
         </ul>}          
       </>

@@ -6,8 +6,8 @@ import API from '../services/api';
 
 export default class App extends Component {
   state = {
+    page: 1,
     result: null,
-    error: null,
     searchName: '',
     status: 'idle',
 
@@ -24,9 +24,10 @@ export default class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const { searchName, page } = this.state;
     if (prevState.searchName !== this.state.searchName) {
       this.setState({ status: 'pending' });
-      API.apiRequest(this.state.searchName)
+      API.apiRequest(searchName, page)
         .then(({ hits }) => this.setState({ result: hits, status: 'resolved'}))
         .catch(error => this.setState({ error , status: 'rejected'}))
     }
@@ -38,7 +39,7 @@ export default class App extends Component {
       return (
         <>
           <Searchbar submit={this.handleSubmitForm} />
-          {/* <h2>Enter search request.</h2> */}
+          <h2>Enter search request.</h2>
         </>
       )
     }
@@ -63,13 +64,5 @@ export default class App extends Component {
         </>
       )
     }
-
-    {/* // return (
-    //   <>
-    //     <Searchbar submit={this.handleSubmitForm} />
-    //     <ImageGallery queryResult={result} />
-    //   </>
-    // ); */}
   }
-
 };

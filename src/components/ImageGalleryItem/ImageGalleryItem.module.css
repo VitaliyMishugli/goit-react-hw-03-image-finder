@@ -8,6 +8,7 @@
 }
 
 .ImageGalleryItem_image {
+  border-radius: 4px;
   width: 100%;
   height: 260px;
   object-fit: cover;
@@ -16,7 +17,7 @@
 
 .ImageGalleryItem_image:hover {
   transform: scale(1.03);
-  cursor: zoom-in;
+  cursor: pointer;
 }
 
 .loading_wraper{
