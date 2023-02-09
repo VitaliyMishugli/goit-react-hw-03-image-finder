@@ -8,13 +8,6 @@ export default class ImageGallery extends Component {
     error: '',
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   // console.log(prevProps.queryResult, this.props.queryResult);
-  //   if (this.props.queryResult === []) {
-  //     this.setState({ error: 'Enter correct search request!' })
-  //   }
-  // }
-
   render() {
     const { queryResult } = this.props;
     return (

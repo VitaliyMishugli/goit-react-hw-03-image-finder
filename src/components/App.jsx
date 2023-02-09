@@ -2,6 +2,7 @@ import { Component } from "react";
 import Searchbar from "./Searchbar/Searchbar";
 import ImageGallery from './ImageGallery/ImageGallery';
 import { Loader } from "./Loader/Loader";
+import { Button } from "./Button/Button";
 import API from '../services/api';
 
 export default class App extends Component {
@@ -19,17 +20,34 @@ export default class App extends Component {
 
   handleSubmitForm = (searchName) => {
     this.setState({
-      searchName
+      searchName,
+      page: 1, 
+      result: null, 
+      status: 'idle'
     })
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { searchName, page } = this.state;
-    if (prevState.searchName !== this.state.searchName) {
-      this.setState({ status: 'pending' });
-      API.apiRequest(searchName, page)
-        .then(({ hits }) => this.setState({ result: hits, status: 'resolved'}))
-        .catch(error => this.setState({ error , status: 'rejected'}))
+  pageIncrement = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }))
+  }
+
+  componentDidUpdate(_, prevState) {
+    // console.log("prevState.page ", prevState.page);
+    // console.log("this.state.page ", this.state.page);
+    // console.log("prevState.searchName ", prevState.searchName);
+    // console.log("this.state.searchName ", this.state.searchName);
+
+    if (prevState.page !== this.state.page || prevState.searchName !== this.state.searchName) {
+      console.log('Fetch data');
+      const { searchName, page } = this.state;
+      // if (prevState.searchName !== this.state.searchName) {
+        this.setState({ status: 'pending' });
+        API.apiRequest(searchName, page)
+          .then(({ hits }) => this.setState({ result: hits, status: 'resolved' }))
+          .catch(error => this.setState({ error, status: 'rejected' }))
+      // }
     }
   }
 
@@ -61,6 +79,7 @@ export default class App extends Component {
         <>
           <Searchbar submit={this.handleSubmitForm} />
           <ImageGallery queryResult={result} />
+          <Button pageIncrement={ this.pageIncrement} />
         </>
       )
     }
