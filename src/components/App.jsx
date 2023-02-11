@@ -3,6 +3,7 @@ import Searchbar from "./Searchbar/Searchbar";
 import ImageGallery from './ImageGallery/ImageGallery';
 import { Loader } from "./Loader/Loader";
 import { Button } from "./Button/Button";
+import { Modal } from "./Modal/Modal";
 import API from '../services/api';
 
 export default class App extends Component {
@@ -34,11 +35,6 @@ export default class App extends Component {
   }
 
   componentDidUpdate(_, prevState) {
-    // console.log("prevState.page ", prevState.page);
-    // console.log("this.state.page ", this.state.page);
-    // console.log("prevState.searchName ", prevState.searchName);
-    // console.log("this.state.searchName ", this.state.searchName);
-
     if (prevState.page !== this.state.page || prevState.searchName !== this.state.searchName) {
       console.log('Fetch data');
       const { searchName, page } = this.state;
@@ -79,7 +75,8 @@ export default class App extends Component {
         <>
           <Searchbar submit={this.handleSubmitForm} />
           <ImageGallery queryResult={result} />
-          <Button pageIncrement={ this.pageIncrement} />
+          <Button pageIncrement={this.pageIncrement} />
+          {/* <Modal image={ result[0].id} /> */}
         </>
       )
     }

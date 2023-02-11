@@ -16,8 +16,7 @@ export default class ImageGallery extends Component {
           {queryResult.map(({ id, webformatURL }) => <ImageGalleryItem key={id} image={webformatURL} />
           )}
         </ul>}          
-      </>
-
+      </> 
     )
   }
 }
