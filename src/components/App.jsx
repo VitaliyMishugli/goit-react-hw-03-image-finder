@@ -22,13 +22,14 @@ export default class App extends Component {
   handleSubmitForm = (searchName) => {
     this.setState({
       searchName,
-      page: 1, 
-      result: null, 
+      page: 1,
+      result: null,
       status: 'idle'
     })
   }
 
-  pageIncrement = () => {
+  pageIncrement = (e) => {
+    e.preventDefault();
     this.setState(prevState => ({
       page: prevState.page + 1,
     }))
@@ -37,12 +38,18 @@ export default class App extends Component {
   componentDidUpdate(_, prevState) {
     if (prevState.page !== this.state.page || prevState.searchName !== this.state.searchName) {
       console.log('Fetch data');
-      const { searchName, page } = this.state;
+      const { searchName, page, result } = this.state;
       // if (prevState.searchName !== this.state.searchName) {
-        this.setState({ status: 'pending' });
-        API.apiRequest(searchName, page)
-          .then(({ hits }) => this.setState({ result: hits, status: 'resolved' }))
-          .catch(error => this.setState({ error, status: 'rejected' }))
+      this.setState({ status: 'pending' });
+      API.apiRequest(searchName, page)
+        .then(({ hits }) => {
+          this.setState({ result: hits, status: 'resolved' });
+             if (prevState.result !== null && result !== null)
+             {
+               this.setState(prevState => ({ result: [...result, ...prevState.result] }))
+             }}
+        )
+        .catch(error => this.setState({ error, status: 'rejected' }));
       // }
     }
   }
