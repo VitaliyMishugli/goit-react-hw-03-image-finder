@@ -80,6 +80,7 @@ export default class App extends Component {
     if (status === 'resolved') {
       return (
         <>
+          <h2>Hello</h2>
           <Searchbar submit={this.handleSubmitForm} />
           <ImageGallery queryResult={result} />
           <Button pageIncrement={this.pageIncrement} />
