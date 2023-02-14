@@ -12,7 +12,6 @@ export default class App extends Component {
     result: null,
     searchName: '',
     status: 'idle',
-
   }
   // 'idle'
   // 'pending'
@@ -28,11 +27,11 @@ export default class App extends Component {
     })
   }
 
-  pageIncrement = (e) => {
-    e.preventDefault();
+  pageIncrement = () => {
+    // e.preventDefault();
     this.setState(prevState => ({
       page: prevState.page + 1,
-    }))
+    }));
   }
 
   componentDidUpdate(_, prevState) {
@@ -44,10 +43,10 @@ export default class App extends Component {
       API.apiRequest(searchName, page)
         .then(({ hits }) => {
           this.setState({ result: hits, status: 'resolved' });
-             if (prevState.result !== null && result !== null)
-             {
-               this.setState(prevState => ({ result: [...result, ...prevState.result] }))
-             }}
+          if (prevState.result !== null) {
+            this.setState(prevState => ({ result: [...prevState.result, ...result] }))
+          }
+        }
         )
         .catch(error => this.setState({ error, status: 'rejected' }));
       // }
@@ -60,7 +59,7 @@ export default class App extends Component {
       return (
         <>
           <Searchbar submit={this.handleSubmitForm} />
-          <h2>Enter search request.</h2>
+          {/* <h2>Enter search request.</h2> */}
         </>
       )
     }
@@ -80,7 +79,6 @@ export default class App extends Component {
     if (status === 'resolved') {
       return (
         <>
-          <h2>Hello</h2>
           <Searchbar submit={this.handleSubmitForm} />
           <ImageGallery queryResult={result} />
           <Button pageIncrement={this.pageIncrement} />
