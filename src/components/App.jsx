@@ -35,16 +35,17 @@ export default class App extends Component {
   }
 
   componentDidUpdate(_, prevState) {
+    const { searchName, page, result } = this.state;
     if (prevState.page !== this.state.page || prevState.searchName !== this.state.searchName) {
       console.log('Fetch data');
-      const { searchName, page, result } = this.state;
       // if (prevState.searchName !== this.state.searchName) {
       this.setState({ status: 'pending' });
       API.apiRequest(searchName, page)
         .then(({ hits }) => {
+          // console.log(hits);
           this.setState({ result: hits, status: 'resolved' });
           if (prevState.result !== null) {
-            this.setState(prevState => ({ result: [...prevState.result, ...result] }))
+            this.setState(prevState => ({ result: [...prevState.result,...result] }))
           }
         }
         )
