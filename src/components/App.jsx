@@ -44,7 +44,7 @@ export default class App extends Component {
         .then(({ hits }) => {
           // console.log(hits);
           this.setState({ result: hits, status: 'resolved' });
-          if (prevState.result !== null) {
+          if (prevState.result !== null ) {
             this.setState(prevState => ({ result: [...prevState.result,...result] }))
           }
         }
@@ -74,7 +74,7 @@ export default class App extends Component {
     }
 
     if (status === 'rejected') {
-      return <h2>Enter correct search request!</h2>
+      return <h2>Sorry, something went wrong... Try again</h2>
     }
 
     if (status === 'resolved') {
