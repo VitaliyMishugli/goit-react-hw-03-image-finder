@@ -5,30 +5,32 @@ import PropTypes from 'prop-types';
 
 export default class Searchbar extends Component{
   state = {
-    searchName: '',
+    searchName: "",
   }
-
+ 
   handleSearchName = (event) => {
     event.preventDefault();
     this.setState({
-      searchName: event.currentTarget.value.toLowerCase()
+      searchName: event.currentTarget.value
     })
   }
 
   handleSubmit = (event) => {
-    event.preventDefault();
-    if (this.state.searchName.trim() === '') {
+    event.preventDefault();    
+    const searchQuery = this.state.searchName.toLowerCase().trim();
+    console.log(searchQuery);
+    if (searchQuery === '') {
       return alert("Enter search query!");
     }
-    this.props.submit(this.state.searchName);
-    this.setState({ searchName: '' });
+    this.props.submit(searchQuery);
+    this.setState({searchName: ''})
   }
 
   render() {
     return (
       <header className={css.searchbar}>
         <form className={css.SearchForm} onSubmit={this.handleSubmit}>
-          <button type="submit" className={css.SearchForm_button}>
+          <button className={css.SearchForm_button}>
             <ImSearch />
             {/* <span className={css.SearchForm_button__label}></span> */}
           </button>

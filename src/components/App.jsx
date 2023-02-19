@@ -11,19 +11,15 @@ export default class App extends Component {
     page: 1,
     result: null,
     searchName: '',
-    status: 'idle',
+    isLoading: false,
   }
-  // 'idle'
-  // 'pending'
-  // 'resolved'
-  // 'rejected'
 
   handleSubmitForm = (searchName) => {
+    console.log(searchName);
     this.setState({
       searchName,
       page: 1,
       result: null,
-      status: 'idle'
     })
   }
 
@@ -39,53 +35,35 @@ export default class App extends Component {
     if (prevState.page !== this.state.page || prevState.searchName !== this.state.searchName) {
       console.log('Fetch data');
       // if (prevState.searchName !== this.state.searchName) {
-      this.setState({ status: 'pending' });
+      // this.setState({ isLoading: true });
       API.apiRequest(searchName, page)
         .then(({ hits }) => {
-          // console.log(hits);
-          this.setState({ result: hits, status: 'resolved' });
+          this.setState({ isLoading: true });
+          this.setState({ result: hits});
           if (prevState.result !== null ) {
             this.setState(prevState => ({ result: [...prevState.result,...result] }))
           }
+          this.setState({ isLoading: false });
         }
         )
-        .catch(error => this.setState({ error, status: 'rejected' }));
-      // }
-    }
+        .catch(error => this.setState({ error }));
+      }
+      // this.setState({ isLoading: false });
+    // }
   }
 
   render() {
-    const { result, status } = this.state;
-    if (status === 'idle') {
-      return (
-        <>
-          <Searchbar submit={this.handleSubmitForm} />
-          {/* <h2>Enter search request.</h2> */}
-        </>
-      )
-    }
-
-    if (status === 'pending') {
-      return (
-        <>
-          <Searchbar submit={this.handleSubmitForm} />
-          <Loader />
-        </>)
-    }
-
-    if (status === 'rejected') {
-      return <h2>Sorry, something went wrong... Try again</h2>
-    }
-
-    if (status === 'resolved') {
+    const { result } = this.state;
+   
       return (
         <>
           <Searchbar submit={this.handleSubmitForm} />
           <ImageGallery queryResult={result} />
-          <Button pageIncrement={this.pageIncrement} />
+          {/* {this.state.isLoading && <Loader />} */}
+          {/* {!this.state.isLoading && <Button pageIncrement={this.pageIncrement} />} */}
+          {/* <Button pageIncrement={this.pageIncrement} /> */}
           {/* <Modal image={ result[0].id} /> */}
         </>
       )
-    }
   }
 };
