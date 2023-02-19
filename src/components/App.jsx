@@ -12,44 +12,61 @@ export default class App extends Component {
     result: null,
     searchName: '',
     isLoading: false,
+    isLoadingMore: false,
+    total: 0
   }
 
   handleSubmitForm = (searchName) => {
-    console.log(searchName);
+    // console.log(searchName);
     this.setState({
       searchName,
       page: 1,
       result: null,
+      isLoadingMore: false,
     })
   }
 
   pageIncrement = () => {
-    // e.preventDefault();
     this.setState(prevState => ({
       page: prevState.page + 1,
     }));
   }
 
   componentDidUpdate(_, prevState) {
-    const { searchName, page, result } = this.state;
+    const { searchName, page, result, total } = this.state;
     if (prevState.page !== this.state.page || prevState.searchName !== this.state.searchName) {
       console.log('Fetch data');
-      // if (prevState.searchName !== this.state.searchName) {
-      // this.setState({ isLoading: true });
+      console.log(prevState.total);
       API.apiRequest(searchName, page)
-        .then(({ hits }) => {
-          this.setState({ isLoading: true });
-          this.setState({ result: hits});
-          if (prevState.result !== null ) {
-            this.setState(prevState => ({ result: [...prevState.result,...result] }))
+        .then(({ hits, totalHits }) => {
+          // ===
+          this.setState({ total: totalHits });
+          // ===
+          if (totalHits === 0) {
+            alert("There's no answer by your request.");
+            return;
           }
-          this.setState({ isLoading: false });
+          else {
+            this.setState({ isLoading: true, result: hits });
+            // this.setState({ result: hits });
+
+            if (prevState.result !== null) {
+              this.setState(prevState => ({ result: [...result, ...prevState.result] }))
+            }
+            this.setState({ isLoading: false, isLoadingMore: true });
+            
+          }
+          // this.setState({ isLoading: true });
+          // this.setState({ result: hits, total: totalHits });
+          
+          // if (prevState.result !== null ) {
+          //   this.setState(prevState => ({ result: [...result, ...prevState.result] }))
+          // }
+          // this.setState({ isLoading: false, isLoadingMore: true });
         }
         )
         .catch(error => this.setState({ error }));
       }
-      // this.setState({ isLoading: false });
-    // }
   }
 
   render() {
@@ -59,9 +76,8 @@ export default class App extends Component {
         <>
           <Searchbar submit={this.handleSubmitForm} />
           <ImageGallery queryResult={result} />
-          {/* {this.state.isLoading && <Loader />} */}
-          {/* {!this.state.isLoading && <Button pageIncrement={this.pageIncrement} />} */}
-          {/* <Button pageIncrement={this.pageIncrement} /> */}
+          {this.state.isLoading && <Loader />}
+          {this.state.isLoadingMore && <Button pageIncrement={this.pageIncrement} />}
           {/* <Modal image={ result[0].id} /> */}
         </>
       )
