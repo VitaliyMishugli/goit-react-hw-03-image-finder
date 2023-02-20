@@ -29,57 +29,53 @@ export default class App extends Component {
   pageIncrement = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
+      total: prevState.total - 12      
     }));
+    
   }
 
   componentDidUpdate(_, prevState) {
     const { searchName, page, result, total } = this.state;
     if (prevState.page !== this.state.page || prevState.searchName !== this.state.searchName) {
       console.log('Fetch data');
-      console.log(prevState.total);
       API.apiRequest(searchName, page)
         .then(({ hits, totalHits }) => {
-          // ===
-          this.setState({ total: totalHits });
-          // ===
+          this.setState({ isLoading: true, result: hits });
           if (totalHits === 0) {
             alert("There's no answer by your request.");
             return;
           }
           else {
-            this.setState({ isLoading: true, result: hits });
-            // this.setState({ result: hits });
-
-            if (prevState.result !== null) {
+            if (total === 0) {
+              this.setState({ total: totalHits, isLoadingMore: false });
+              // console.log("Записали тотал хітс в тотал");
+            }
+            else if(total <= 12) {
+              // console.log(total, 'Нічого в тотал не пишемо');
+              this.setState({isLoadingMore: false})
+              // alert('Картинок більше немає');
+            }
+            if (prevState.result !== null && result !== null) {
               this.setState(prevState => ({ result: [...result, ...prevState.result] }))
             }
             this.setState({ isLoading: false, isLoadingMore: true });
-            
           }
-          // this.setState({ isLoading: true });
-          // this.setState({ result: hits, total: totalHits });
-          
-          // if (prevState.result !== null ) {
-          //   this.setState(prevState => ({ result: [...result, ...prevState.result] }))
-          // }
-          // this.setState({ isLoading: false, isLoadingMore: true });
         }
         )
         .catch(error => this.setState({ error }));
-      }
+    }
   }
 
   render() {
-    const { result } = this.state;
-   
-      return (
-        <>
-          <Searchbar submit={this.handleSubmitForm} />
-          <ImageGallery queryResult={result} />
-          {this.state.isLoading && <Loader />}
-          {this.state.isLoadingMore && <Button pageIncrement={this.pageIncrement} />}
-          {/* <Modal image={ result[0].id} /> */}
-        </>
-      )
+    const { result, isLoading, isLoadingMore } = this.state;
+    return (
+      <>
+        <Searchbar submit={this.handleSubmitForm} />
+        <ImageGallery queryResult={result} />
+        {isLoading && <Loader />}
+        {isLoadingMore && <Button pageIncrement={this.pageIncrement} />}
+        {/* <Modal image={ result[0].id} /> */}
+      </>
+    )
   }
 };

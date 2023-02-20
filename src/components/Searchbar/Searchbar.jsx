@@ -30,7 +30,7 @@ export default class Searchbar extends Component{
     return (
       <header className={css.searchbar}>
         <form className={css.SearchForm} onSubmit={this.handleSubmit}>
-          <button className={css.SearchForm_button}>
+          <button type="submit" className={css.SearchForm_button}>
             <ImSearch />
             {/* <span className={css.SearchForm_button__label}></span> */}
           </button>
