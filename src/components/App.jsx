@@ -46,7 +46,7 @@ export default class App extends Component {
         }
         if (totalHits > 0) {
           this.setState({ isLoadingMore: true });
-          console.log('Hello');
+          console.log('Hello')
         }
         if (this.state.total === 0) {
           this.setState({ total: totalHits });
