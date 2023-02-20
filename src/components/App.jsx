@@ -34,7 +34,7 @@ export default class App extends Component {
   }
 
   async componentDidUpdate(_, prevState) {
-    const { searchName, page, result, total } = this.state;
+    const { searchName, page} = this.state;
     if (prevState.page !== this.state.page ||
       prevState.searchName !== this.state.searchName) {
       console.log('Fetch data');
@@ -84,7 +84,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { result, isLoading, isLoadingMore, total } = this.state;
+    const { result, isLoading,total } = this.state;
     return (
       <>
         <Searchbar submit={this.handleSubmitForm} />
