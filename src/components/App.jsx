@@ -42,7 +42,7 @@ export default class App extends Component {
         this.setState({ isLoading: true });
 
         const { hits, totalHits } = await API.apiRequest(searchName, page);
-      
+
         if (totalHits === 0) {
           alert("There's no answer by your request.");
           this.setState({ isLoading: false });
@@ -57,32 +57,30 @@ export default class App extends Component {
         }));
 
         this.setState({ isLoading: false });
-
-
-        // if (totalHits > 0) {
-        //   this.setState({ isLoadingMore: true });
-        //   console.log('Hello')
-        // }
-        // if (this.state.total === 0) {
-        //   this.setState({ total: totalHits });
-        // }
-        // if (total <= 0) {
-        //   console.log(total, 'Нічого в тотал не пишемо');
-        //   this.setState({ isLoadingMore: false });
-        //   console.log("Кнопку забрали")
-        //   console.log(this.state.isLoadingMore)
-        //   // alert('Картинок більше немає');
-        // }
-        // if (prevState.result !== null && result !== null) {
-        //   this.setState(prevState => ({ result: [...result, ...prevState.result] }));
-        // }
-        // this.setState({ isLoading: false });
-        // }
       }
-      // }
-
       catch (error) { this.setState({ error }) };
     }
+    // ===
+    // if (totalHits > 0) {
+    //   this.setState({ isLoadingMore: true });
+    //   console.log('Hello')
+    // }
+    // if (this.state.total === 0) {
+    //   this.setState({ total: totalHits });
+    // }
+    // if (total <= 0) {
+    //   console.log(total, 'Нічого в тотал не пишемо');
+    //   this.setState({ isLoadingMore: false });
+    //   console.log("Кнопку забрали")
+    //   console.log(this.state.isLoadingMore)
+    //   // alert('Картинок більше немає');
+    // }
+    // if (prevState.result !== null && result !== null) {
+    //   this.setState(prevState => ({ result: [...result, ...prevState.result] }));
+    // }
+    // this.setState({ isLoading: false });
+    // }
+    // ===
   }
 
   render() {
@@ -92,7 +90,7 @@ export default class App extends Component {
         <Searchbar submit={this.handleSubmitForm} />
         <ImageGallery queryResult={result} />
         {isLoading && <Loader />}
-        {!!total  && <Button pageIncrement={this.pageIncrement} />}
+        {!!total && <Button pageIncrement={this.pageIncrement} />}
         {/* <Modal image={ result[0].id} /> */}
       </>
     )
