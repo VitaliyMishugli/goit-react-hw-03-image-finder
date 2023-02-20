@@ -29,45 +29,57 @@ export default class App extends Component {
   pageIncrement = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
-      total: prevState.total - 12      
+      total: prevState.total - 12
     }));
-    
   }
 
-  componentDidUpdate(_, prevState) {
+  async componentDidUpdate(_, prevState) {
     const { searchName, page, result, total } = this.state;
     if (prevState.page !== this.state.page || prevState.searchName !== this.state.searchName) {
       console.log('Fetch data');
-      API.apiRequest(searchName, page)
-        .then(({ hits, totalHits }) => {
-          this.setState({ isLoading: true, result: hits });
-          if (totalHits === 0) {
-            alert("There's no answer by your request.");
-            return;
-          }
-          else {
-            if (total === 0) {
-              this.setState({ total: totalHits, isLoadingMore: false });
-              // console.log("Записали тотал хітс в тотал");
-            }
-            else if(total <= 12) {
-              // console.log(total, 'Нічого в тотал не пишемо');
-              this.setState({isLoadingMore: false})
-              // alert('Картинок більше немає');
-            }
-            if (prevState.result !== null && result !== null) {
-              this.setState(prevState => ({ result: [...result, ...prevState.result] }))
-            }
-            this.setState({ isLoading: false, isLoadingMore: true });
-          }
+      try {
+        const { hits, totalHits } = await API.apiRequest(searchName, page)
+        this.setState({ isLoading: true, result: hits });
+        if (totalHits === 0) {
+          alert("There's no answer by your request.");
+          return;
         }
-        )
-        .catch(error => this.setState({ error }));
+        if (totalHits > 0) {
+          this.setState({ isLoadingMore: true });
+          console.log('Hello')
+        }
+        if (this.state.total === 0) {
+          this.setState({ total: totalHits });
+        }
+
+        // else {
+        // if (total === 0) {
+        //   this.setState({ total: totalHits });
+        //   // console.log("Записали тотал хітс в тотал");
+        // }
+        
+        if (total <= 0) {
+          console.log(total, 'Нічого в тотал не пишемо');
+          this.setState({ isLoadingMore: false });
+          console.log("Кнопку забрали")
+          console.log(this.state.isLoadingMore)
+          // alert('Картинок більше немає');
+        }
+        if (prevState.result !== null && result !== null) {
+          this.setState(prevState => ({ result: [...result, ...prevState.result] }));
+          // this.setState({ isLoading: false, isLoadingMore: true });
+        }
+        this.setState({ isLoading: false });
+        // }
+      }
+      // }
+
+      catch (error) { this.setState({ error }) };
     }
   }
 
   render() {
-    const { result, isLoading, isLoadingMore } = this.state;
+    const { result, isLoading, isLoadingMore, total } = this.state;
     return (
       <>
         <Searchbar submit={this.handleSubmitForm} />
