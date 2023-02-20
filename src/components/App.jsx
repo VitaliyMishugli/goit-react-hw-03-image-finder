@@ -29,47 +29,54 @@ export default class App extends Component {
   pageIncrement = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
-      total: prevState.total - 12
+      // total: prevState.total - 12
     }));
   }
 
   async componentDidUpdate(_, prevState) {
     const { searchName, page, result, total } = this.state;
-    if (prevState.page !== this.state.page || prevState.searchName !== this.state.searchName) {
+    if (prevState.page !== this.state.page ||
+      prevState.searchName !== this.state.searchName) {
       console.log('Fetch data');
       try {
-        const { hits, totalHits } = await API.apiRequest(searchName, page)
-        this.setState({ isLoading: true, result: hits });
+        this.setState({ isLoading: true });
+
+        const { hits, totalHits } = await API.apiRequest(searchName, page);
+      
         if (totalHits === 0) {
           alert("There's no answer by your request.");
+          this.setState({ isLoading: false });
           return;
         }
-        if (totalHits > 0) {
-          this.setState({ isLoadingMore: true });
-          console.log('Hello')
-        }
-        if (this.state.total === 0) {
-          this.setState({ total: totalHits });
-        }
 
-        // else {
-        // if (total === 0) {
-        //   this.setState({ total: totalHits });
-        //   // console.log("Записали тотал хітс в тотал");
-        // }
-        
-        if (total <= 0) {
-          console.log(total, 'Нічого в тотал не пишемо');
-          this.setState({ isLoadingMore: false });
-          console.log("Кнопку забрали")
-          console.log(this.state.isLoadingMore)
-          // alert('Картинок більше немає');
-        }
-        if (prevState.result !== null && result !== null) {
-          this.setState(prevState => ({ result: [...result, ...prevState.result] }));
-          // this.setState({ isLoading: false, isLoadingMore: true });
-        }
+        this.setState(prevState => ({
+          result: page === 1 ? hits : [...prevState.result, ...hits],
+          total: page === 1
+            ? totalHits - hits.length
+            : totalHits - [...prevState.result, ...hits].length,
+        }));
+
         this.setState({ isLoading: false });
+
+
+        // if (totalHits > 0) {
+        //   this.setState({ isLoadingMore: true });
+        //   console.log('Hello')
+        // }
+        // if (this.state.total === 0) {
+        //   this.setState({ total: totalHits });
+        // }
+        // if (total <= 0) {
+        //   console.log(total, 'Нічого в тотал не пишемо');
+        //   this.setState({ isLoadingMore: false });
+        //   console.log("Кнопку забрали")
+        //   console.log(this.state.isLoadingMore)
+        //   // alert('Картинок більше немає');
+        // }
+        // if (prevState.result !== null && result !== null) {
+        //   this.setState(prevState => ({ result: [...result, ...prevState.result] }));
+        // }
+        // this.setState({ isLoading: false });
         // }
       }
       // }
@@ -85,7 +92,7 @@ export default class App extends Component {
         <Searchbar submit={this.handleSubmitForm} />
         <ImageGallery queryResult={result} />
         {isLoading && <Loader />}
-        {isLoadingMore && <Button pageIncrement={this.pageIncrement} />}
+        {!!total  && <Button pageIncrement={this.pageIncrement} />}
         {/* <Modal image={ result[0].id} /> */}
       </>
     )
