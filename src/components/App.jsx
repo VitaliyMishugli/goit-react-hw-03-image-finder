@@ -3,7 +3,6 @@ import Searchbar from "./Searchbar/Searchbar";
 import ImageGallery from './ImageGallery/ImageGallery';
 import { Loader } from "./Loader/Loader";
 import { Button } from "./Button/Button";
-// import { Modal } from "./Modal/Modal";
 import API from '../services/api';
 
 export default class App extends Component {
@@ -29,7 +28,6 @@ export default class App extends Component {
   pageIncrement = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
-      // total: prevState.total - 12
     }));
   }
 
@@ -60,27 +58,6 @@ export default class App extends Component {
       }
       catch (error) { this.setState({ error }) };
     }
-    // ===
-    // if (totalHits > 0) {
-    //   this.setState({ isLoadingMore: true });
-    //   console.log('Hello')
-    // }
-    // if (this.state.total === 0) {
-    //   this.setState({ total: totalHits });
-    // }
-    // if (total <= 0) {
-    //   console.log(total, 'Нічого в тотал не пишемо');
-    //   this.setState({ isLoadingMore: false });
-    //   console.log("Кнопку забрали")
-    //   console.log(this.state.isLoadingMore)
-    //   // alert('Картинок більше немає');
-    // }
-    // if (prevState.result !== null && result !== null) {
-    //   this.setState(prevState => ({ result: [...result, ...prevState.result] }));
-    // }
-    // this.setState({ isLoading: false });
-    // }
-    // ===
   }
 
   render() {
@@ -91,7 +68,7 @@ export default class App extends Component {
         <ImageGallery queryResult={result} />
         {isLoading && <Loader />}
         {!!total && <Button pageIncrement={this.pageIncrement} />}
-        {/* <Modal image={ result[0].id} /> */}
+       
       </>
     )
   }

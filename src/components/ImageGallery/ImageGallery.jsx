@@ -13,7 +13,7 @@ export default class ImageGallery extends Component {
     return (
       <>
         {queryResult && <ul className={css.ImageGallery}>
-          {queryResult.map(({ id, webformatURL }) => <ImageGalleryItem key={id} image={webformatURL} />
+          {queryResult.map(({ id, webformatURL, largeImageURL }) => <ImageGalleryItem key={id} image={webformatURL} largeImg={largeImageURL} />
           )}
         </ul>}          
       </> 
